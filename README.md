@@ -44,7 +44,7 @@ A production-ready Django-based Book Recommendation and Q&A system leveraging TF
 ![Add Book](assets/add_book.png)
 
 ### 🤖 Ask AI
-![Ask AI](assets/ask_ai.png)
+![Ask AI](assets/ask_AI.png)
 
 ---
 
