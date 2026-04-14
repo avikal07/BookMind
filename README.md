@@ -1,30 +1,81 @@
-# 📚 BookMind — AI-Powered Book Recommendation & Q&A System
+# 📚 BookMind — AI-Powered Book Recommendation System
 
-A clean, production-ready Django base project for a Book Recommendation and Q&A system,
-architected for seamless AI/RAG integration.
+A production-ready Django-based Book Recommendation and Q&A system leveraging TF-IDF vectorization, cosine similarity, and a RAG-inspired architecture for intelligent book discovery and semantic querying.
 
----
+🌐 **Live Demo (MVP):** https://bookmind-zu6u.onrender.com/
+
+> Designed with a modular architecture enabling seamless integration of LLM APIs (OpenAI / Hugging Face) for future semantic search and Q&A capabilities.
 
 ## Tech Stack
 
-| Layer       | Technology                      |
-|-------------|---------------------------------|
-| Backend     | Django 4.2 (Python)             |
-| Database    | MySQL                           |
-| Frontend    | Django Templates + Bootstrap 5  |
-| Env Mgmt    | python-dotenv                   |
-| AI (future) | ChromaDB, sentence-transformers |
+| Layer            | Technology                              |
+|------------------|------------------------------------------|
+| Backend          | Django 4.2 (Python)                     |
+| Database         | SQLite (default) / MySQL (configurable) |
+| Frontend         | Django Templates + Bootstrap 5          |
+| Env Management   | python-dotenv                           |
+| ML / NLP         | scikit-learn (TF-IDF, Cosine Similarity)|
+| AI Integration   | OpenAI API (optional with fallback)     |
+| Future Upgrade   | ChromaDB, sentence-transformers         |
 
 ---
 
 ## Features
 
-- 📖 Browse all books on a responsive dashboard
-- ➕ Add books via a clean validated form
-- 🔍 View full book details — description, reviews, rating
-- 🤖 Ask AI page (placeholder, wired for RAG integration)
-- 🛠 Django Admin panel for data management
+- 📖 Dynamic book dashboard with database-driven rendering  
+- ➕ Add and manage books with validated Django forms  
+- 🔍 Detailed book view including metadata (description, reviews, rating)  
+- 🤖 Intelligent query system using semantic similarity (TF-IDF + cosine similarity)  
+- 🔢 Dynamic top-N recommendations extracted from natural language queries  
+- 🧠 RAG-inspired pipeline (retrieval + optional LLM generation with fallback)  
+- ⚠️ Robust error handling for API failures (graceful fallback to rule-based output)  
+- 🛠 Django Admin panel for structured data management  
 
+---
+
+## 📸 Screenshots
+
+## 📸 Screenshots
+
+### 📊 Dashboard
+![Dashboard](assets/dashboard.png)
+
+### ➕ Add Book
+![Add Book](assets/add_book.png)
+
+### 🤖 Ask AI
+![Ask AI](assets/ask_ai.png)
+
+---
+
+
+
+
+## ⚙️ Architecture — How It Works
+
+The system follows a lightweight Retrieval-Augmented Generation (RAG)-inspired pipeline combining traditional Information Retrieval (IR) techniques with optional LLM-based response generation.
+
+### 🔄 Pipeline
+
+1. **User Query Input**
+   - Natural language query received via `/ask/`
+
+2. **Text Aggregation**
+   - Book metadata (title, author, description, reviews) is combined into a single textual representation
+
+3. **Vectorization**
+   - TF-IDF (scikit-learn) transforms text into numerical feature vectors
+
+4. **Similarity Search**
+   - Cosine similarity computes relevance between query and book vectors
+
+5. **Top-K Retrieval**
+   - Dynamic number of recommendations extracted from query using regex
+
+6. **Response Generation (Optional)**
+   - OpenAI API (LLM) generates contextual explanation  
+   - Fallback returns ranked book recommendations
+   
 ---
 
 ## Project Structure
@@ -147,13 +198,13 @@ Visit: **http://127.0.0.1:8000**
 
 ## URL Routes
 
-| URL            | View          | Description             |
-|----------------|---------------|-------------------------|
-| `/`            | book_list     | Dashboard — all books   |
-| `/book/add/`   | add_book      | Add a new book          |
-| `/book/<pk>/`  | book_detail   | Full book detail page   |
-| `/ask/`        | ask_question  | Ask AI (placeholder)    |
-| `/admin/`      | Django Admin  | Admin panel             |
+| Endpoint        | View Function  | Description                                                                 |
+|-----------------|----------------|-----------------------------------------------------------------------------|
+| `/`             | `book_list`    | Displays all books with dynamic rendering from the database                |
+| `/book/add/`    | `add_book`     | Form-based book creation with validation                                   |
+| `/book/<pk>/`   | `book_detail`  | Detailed view of a selected book                                           |
+| `/ask/`         | `ask_question` | Semantic query interface with TF-IDF similarity + dynamic recommendations  |
+| `/admin/`       | Django Admin   | Built-in admin panel for managing data                                     |
 
 ---
 
@@ -172,45 +223,40 @@ open http://127.0.0.1:8000
 
 ---
 
-## Future Improvements (AI/RAG Integration)
+## Future Enhancements
 
-| Feature               | Technology                      | Status  |
-|-----------------------|---------------------------------|---------|
-| Text embeddings       | sentence-transformers           | Planned |
-| Vector storage        | ChromaDB                        | Planned |
-| Semantic book search  | ChromaDB similarity query       | Planned |
-| RAG Q&A pipeline      | LangChain / custom              | Planned |
-| LLM response          | OpenAI / local LLM              | Planned |
-| User authentication   | Django Auth                     | Planned |
-| Reading history       | Extended User model             | Planned |
+The current system implements a lightweight semantic retrieval pipeline using TF-IDF vectorization and cosine similarity. The following enhancements can further evolve it into a full-scale production-grade RAG system:
 
-### How AI will plug in
+| Feature                    | Technology / Approach              | Status        |
+|---------------------------|-----------------------------------|--------------|
+| Semantic embeddings       | TF-IDF (scikit-learn)             | Implemented ✅ |
+| Similarity search         | Cosine similarity                 | Implemented ✅ |
+| Dynamic top-N retrieval   | Regex-based query parsing         | Implemented ✅ |
+| LLM-based response        | OpenAI API (with fallback)        | Integrated ⚠️ |
+| Advanced embeddings       | sentence-transformers             | Planned       |
+| Vector database           | ChromaDB / FAISS                  | Planned       |
+| Full RAG pipeline         | LangChain / custom pipeline       | Planned       |
+| Context-aware responses   | Prompt engineering + LLM          | Planned       |
+| User authentication       | Django Auth                       | Planned       |
+| Personalization           | User history + recommendation     | Planned       |
 
-The `ask_question` view in `books/views.py` already has a placeholder return.
-Replace it with:
-
-1. Embed the user query using `sentence-transformers`
-2. Query ChromaDB for the top-k similar book chunks
-3. Pass retrieved context + query to an LLM
-4. Return the generated answer to the template
-
----
-
-## Zip for Submission
-
-```bash
-cd ..
-zip -r book_recommender.zip book_recommender/ \
-  --exclude "*/venv/*" \
-  --exclude "*/__pycache__/*" \
-  --exclude "*/*.pyc" \
-  --exclude "*/.env"
-```
-
-The zip file will appear one level above your project folder.
 
 ---
 
 ## License
 
 MIT
+
+---
+
+## 👨‍💻 Author
+
+**Avikal Singh**  
+Backend Developer (Django | Python) • AI & Machine Learning Enthusiast  
+
+- 🔧 Built: RAG-inspired Book Recommendation System using TF-IDF and Cosine Similarity  
+- 💻 Focus: Backend Development, API Design, and AI Integration  
+- 🤖 Exploring: Machine Learning, LLMs, and Semantic Search Systems  
+
+- GitHub: [avikal07](https://github.com/avikal07)  
+- LinkedIn: [Avikal Singh](https://linkedin.com/in/avikal-singh)
