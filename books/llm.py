@@ -1,13 +1,19 @@
 import os
 from openai import OpenAI
-
 from dotenv import load_dotenv
-load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+load_dotenv()
 
 
 def generate_answer(query, book):
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    # If no API key → trigger fallback
+    if not api_key:
+        raise Exception("No API key found")
+
+    client = OpenAI(api_key=api_key)
+
     prompt = f"""
     User asked: {query}
 

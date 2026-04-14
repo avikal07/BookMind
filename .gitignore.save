@@ -1,0 +1,30 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Database
+db.sqlite3
+
+# Django static files
+staticfiles/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# C extensions
+*.so
+
+# OS files
+.DS_Store
+Thumbs.db
