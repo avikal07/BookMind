@@ -33,7 +33,7 @@ A production-ready Django-based Book Recommendation and Q&A system leveraging TF
 
 ---
 
-## 📸 Screenshots
+
 
 ## 📸 Screenshots
 
