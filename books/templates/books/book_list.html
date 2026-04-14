@@ -1,0 +1,59 @@
+{% extends "books/base.html" %}
+{% block title %}Dashboard — BookMind{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1>Book Dashboard</h1>
+    <p>Browse your collection or add a new title</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Stats + CTA -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <strong>{{ books.count }}</strong>
+      <span class="text-muted ms-1">book{% if books.count != 1 %}s{% endif %} in collection</span>
+    </div>
+    <a href="{% url 'add_book' %}" class="btn btn-primary px-4">+ Add Book</a>
+  </div>
+
+  {% if books %}
+    <div class="row g-4">
+      {% for book in books %}
+      <div class="col-sm-6 col-lg-4">
+        <div class="book-card">
+          <div class="book-card-title">{{ book.title }}</div>
+          <div class="book-card-author">by {{ book.author }}</div>
+          <div class="book-card-desc">{{ book.description }}</div>
+          <div class="book-card-footer">
+            <div>
+              <span class="stars">
+                {% with r=book.rating|floatformat:0 %}
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= r|add:0 %}★{% else %}☆{% endif %}
+                  {% endfor %}
+                {% endwith %}
+              </span>
+              <span class="rating-badge ms-1">{{ book.rating }}/5</span>
+            </div>
+            <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary btn-sm">View →</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">📚</div>
+      <h4>No books yet</h4>
+      <p class="mb-4">Start building your collection by adding the first book.</p>
+      <a href="{% url 'add_book' %}" class="btn btn-primary px-5">Add Your First Book</a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

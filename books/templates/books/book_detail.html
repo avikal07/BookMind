@@ -1,0 +1,59 @@
+{% extends "books/base.html" %}
+{% block title %}{{ book.title }} — BookMind{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width:780px;">
+
+  <a href="{% url 'book_list' %}" class="btn btn-dark btn-sm mb-4">← Back to Dashboard</a>
+
+  <div class="detail-card">
+    <div class="detail-header">
+      <h2>{{ book.title }}</h2>
+      <div class="author">by {{ book.author }}</div>
+      <div class="mt-3 d-flex align-items-center gap-3">
+        <span class="stars" style="font-size:1.1rem;">
+          {% with r=book.rating|floatformat:0 %}
+            {% for i in "12345" %}
+              {% if forloop.counter <= r|add:0 %}★{% else %}☆{% endif %}
+            {% endfor %}
+          {% endwith %}
+        </span>
+        <span class="rating-badge">{{ book.rating }} / 5</span>
+        <span class="meta-pill" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);border-color:transparent;">
+          Added {{ book.created_at|date:"N j, Y" }}
+        </span>
+      </div>
+    </div>
+
+    <div class="detail-body">
+
+      <div class="mb-4">
+        <div class="section-label">Description</div>
+        <div class="section-text">{{ book.description }}</div>
+      </div>
+
+      {% if book.reviews %}
+      <hr class="section-divider">
+      <div>
+        <div class="section-label">Reader Reviews</div>
+        <div class="section-text">{{ book.reviews }}</div>
+      </div>
+      {% endif %}
+
+      <hr class="section-divider">
+      <div class="d-flex gap-2 flex-wrap">
+        <span class="meta-pill">📅 {{ book.created_at|date:"F j, Y" }}</span>
+        <span class="meta-pill">⭐ {{ book.rating }} stars</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <a href="{% url 'ask_question' %}" class="btn btn-primary px-4">
+      Ask AI about this book →
+    </a>
+  </div>
+
+</div>
+{% endblock %}
